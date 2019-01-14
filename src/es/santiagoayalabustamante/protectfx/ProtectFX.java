@@ -6,11 +6,14 @@
 package es.santiagoayalabustamante.protectfx;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
 /**
@@ -21,24 +24,39 @@ public class ProtectFX extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
+        int ancho = 600;
+        int alto = 400;
+        Rectangle rectangFlecha = new Rectangle(0, 0, 15, 10);
+        Polygon triangFlecha = new Polygon(new double[]{
+            15.0, -5.0,
+            25.0, 5.0,
+            15.0, 15.0 });
+        Circle circuloCorazon1 = new Circle (5, 5, 5, Color.RED);
+        Circle circuloCorazon2 = new Circle (13, 5, 5, Color.RED);
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        rectangFlecha.setFill(Color.BLACK);
+        triangFlecha.setFill(Color.BLACK);
+        Pane root = new Pane();
+        Scene scene = new Scene(root, ancho, alto); 
         
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("FlechaFX");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        Group flecha = new Group();
+        flecha.getChildren().add(rectangFlecha);
+        flecha.getChildren().add(triangFlecha);
+        
+        Group corazon = new Group ();
+        corazon.getChildren().add(circuloCorazon1);
+        corazon.getChildren().add(circuloCorazon2);
+        
+        flecha.setLayoutX(0);
+        flecha.setLayoutY(alto/2);
+        
+        root.getChildren().add(flecha);
+        root.getChildren().add(corazon);
+
     }
 
     /**

@@ -23,6 +23,8 @@ import javafx.stage.Stage;
  */
 public class ProtectFX extends Application {
     
+    int flechaX = 0;
+    
     @Override
     public void start(Stage primaryStage) {
         int ancho = 800;
@@ -70,9 +72,6 @@ public class ProtectFX extends Application {
         escudo.getChildren().add(rectangEscudo1);
         escudo.getChildren().add(rectangEscudo2);
         
-        flecha.setLayoutX(0);
-        flecha.setLayoutY(alto/2);
-        
         corazon.setLayoutX(ancho/2);
         corazon.setLayoutY(alto/2);
         
@@ -98,12 +97,12 @@ public class ProtectFX extends Application {
                 case LEFT:
                     escudo.setRotate(270.0);
                     escudo.setLayoutX(ancho/2-45);
-                    escudo.setLayoutY(alto/2);
+                    escudo.setLayoutY(alto/2-5);
                     break;
                 case RIGHT:
                     escudo.setRotate(90.0);
                     escudo.setLayoutX(ancho/2+10);
-                    escudo.setLayoutY(alto/2);
+                    escudo.setLayoutY(alto/2-5);
                     break;
             }
         });
@@ -111,7 +110,9 @@ public class ProtectFX extends Application {
         AnimationTimer animacionFlecha = new AnimationTimer(){
             @Override
             public void handle(long now){
-                
+                flechaX += 2;
+                flecha.setLayoutX(flechaX);
+                flecha.setLayoutY(alto/2);
             };
         };
         animacionFlecha.start();

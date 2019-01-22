@@ -5,6 +5,7 @@
  */
 package es.santiagoayalabustamante.protectfx;
 
+import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -34,6 +35,8 @@ public class ProtectFX extends Application {
     public void start(Stage primaryStage) {
         int ancho = 600;
         int alto = 600;
+        
+        Random random = new Random();
         
         Rectangle bordePS = new Rectangle (20, 20, 112, 40);
         Rectangle huecoPS = new Rectangle (25, 25, 102, 30);
@@ -157,22 +160,22 @@ public class ProtectFX extends Application {
             }
         });
         
-        AnimationTimer animacionFlecha = new AnimationTimer(){
+        AnimationTimer animacion = new AnimationTimer(){
             @Override
             public void handle(long now){
-                flecha1X += 2;
+                flecha1X += 1;
                 flecha1.setLayoutX(flecha1X-10);
                 flecha1.setLayoutY(alto/2);
                 
-                flecha2Y += 2;
+                flecha2Y += 1;
                 flecha2.setLayoutX(ancho/2);
                 flecha2.setLayoutY(flecha2Y-110);
                 
-                flecha3X -= 2;
+                flecha3X -= 1;
                 flecha3.setLayoutX(ancho + flecha3X+210);
                 flecha3.setLayoutY(alto/2);
                 
-                flecha4Y -= 2;
+                flecha4Y -= 1;
                 flecha4.setLayoutX(ancho/2);
                 flecha4.setLayoutY(alto + flecha4Y+360);
                 
@@ -180,8 +183,9 @@ public class ProtectFX extends Application {
                 boolean colisionVacia1 = colisionEscudo1.getBoundsInLocal().isEmpty();
 
                 if(colisionVacia1 == false){
+                    int numFlecha1 = random.nextInt(ancho/2);
                     flecha1.setLayoutX(-30);
-                    flecha1X = 0;
+                    flecha1X = 0-numFlecha1;
                 }
                 
                 Shape colisionEscudo2 = Shape.intersect(flecha2.triangFlecha, rectangEscudo1);
@@ -202,14 +206,66 @@ public class ProtectFX extends Application {
                 
                 Shape colisionEscudo4 = Shape.intersect(flecha4.triangFlecha, rectangEscudo1);
                 boolean colisionVacia4 = colisionEscudo4.getBoundsInLocal().isEmpty();
-
+ 
                 if(colisionVacia4 == false){
                     flecha4.setLayoutY(alto+30);
                     flecha4Y = 0;
                 }
+                
+                Shape colisionCorazon1 = Shape.intersect(flecha1.triangFlecha, circuloCorazon1);
+                boolean daño1 = colisionCorazon1.getBoundsInLocal().isEmpty();
+
+                if(daño1 == false){
+                    flecha1.setLayoutX(-30);
+                    flecha1X = 0;
+                    puntosSalud = puntosSalud-10;
+                    indicadorPS.setWidth(puntosSalud);
+                }
+                
+                Shape colisionCorazon2 = Shape.intersect(flecha2.triangFlecha, circuloCorazon1);
+                boolean daño2 = colisionCorazon2.getBoundsInLocal().isEmpty();
+
+                if(daño2 == false){
+                    flecha2.setLayoutY(-30);
+                    flecha2Y = 0;
+                    puntosSalud = puntosSalud-10;
+                    indicadorPS.setWidth(puntosSalud);
+                }
+                
+                Shape colisionCorazon3 = Shape.intersect(flecha3.triangFlecha, circuloCorazon2);
+                boolean daño3 = colisionCorazon3.getBoundsInLocal().isEmpty();
+
+                if(daño3 == false){
+                    flecha3.setLayoutX(ancho+30);
+                    flecha3X = 0;
+                    puntosSalud = puntosSalud-10;
+                    indicadorPS.setWidth(puntosSalud);
+                }
+                
+                Shape colisionCorazon4 = Shape.intersect(flecha4.triangFlecha, triangCorazon);
+                boolean daño4 = colisionCorazon4.getBoundsInLocal().isEmpty();
+
+                if(daño4 == false){
+                    flecha4.setLayoutY(alto+30);
+                    flecha4Y = 0;
+                    puntosSalud = puntosSalud-10;
+                    indicadorPS.setWidth(puntosSalud);
+                }
+                
+                if(puntosSalud <= 30){
+                    bordePS.setFill(Color.RED);
+                    indicadorPS.setFill(Color.RED);
+                    izqHache.setFill(Color.RED);
+                    derHache.setFill(Color.RED);
+                    midHache.setFill(Color.RED);
+                    barraIzqP.setFill (Color.RED);
+                    barraDerP.setFill (Color.RED);
+                    barraSupP.setFill (Color.RED);
+                    barraInfP.setFill (Color.RED);
+                }
             };            
         };
-        animacionFlecha.start();
+        animacion.start();
     }
 
     /**

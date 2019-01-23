@@ -30,32 +30,44 @@ public class ProtectFX extends Application {
     int flecha3X = 0;
     int flecha4Y = 0;
     int puntosSalud = 100;
+    int ancho = 600;
+    int alto = 600;
+    Rectangle bordePS;
+    Rectangle huecoPS;
+    Rectangle indicadorPS;
+    Rectangle izqHache;
+    Rectangle derHache;
+    Rectangle midHache;
+    Rectangle barraIzqP;
+    Rectangle barraDerP;
+    Rectangle barraSupP;
+    Rectangle barraInfP;
+    Group escudo = new Group();
+    AnimationTimer animacion;
     
     @Override
     public void start(Stage primaryStage) {
-        int ancho = 600;
-        int alto = 600;
         
         Random random = new Random();
         
-        Rectangle bordePS = new Rectangle (20, 20, 112, 40);
-        Rectangle huecoPS = new Rectangle (25, 25, 102, 30);
-        Rectangle indicadorPS = new Rectangle (26, 26, puntosSalud, 28);
+        bordePS = new Rectangle (20, 20, 112, 40);
+        huecoPS = new Rectangle (25, 25, 102, 30);
+        indicadorPS = new Rectangle (26, 26, puntosSalud, 28);
         bordePS.setFill(Color.YELLOW);
         huecoPS.setFill(Color.BLACK);
         indicadorPS.setFill(Color.YELLOW);
         
-        Rectangle izqHache = new Rectangle (150, 25, 5, 30);
-        Rectangle derHache = new Rectangle (165, 25, 5, 30);
-        Rectangle midHache = new Rectangle (150, 37, 20, 5);
+        izqHache = new Rectangle (150, 25, 5, 30);
+        derHache = new Rectangle (165, 25, 5, 30);
+        midHache = new Rectangle (150, 37, 20, 5);
         izqHache.setFill(Color.YELLOW);
         derHache.setFill(Color.YELLOW);
         midHache.setFill(Color.YELLOW);
         
-        Rectangle barraIzqP = new Rectangle (180, 25, 5, 30);
-        Rectangle barraDerP = new Rectangle (194, 25, 5, 15);
-        Rectangle barraSupP = new Rectangle (180, 25, 19, 5);
-        Rectangle barraInfP = new Rectangle (180, 39, 19, 5);
+        barraIzqP = new Rectangle (180, 25, 5, 30);
+        barraDerP = new Rectangle (194, 25, 5, 15);
+        barraSupP = new Rectangle (180, 25, 19, 5);
+        barraInfP = new Rectangle (180, 39, 19, 5);
         barraIzqP.setFill (Color.YELLOW);
         barraDerP.setFill (Color.YELLOW);
         barraSupP.setFill (Color.YELLOW);
@@ -88,7 +100,6 @@ public class ProtectFX extends Application {
         corazon.getChildren().add(circuloCorazon2);
         corazon.getChildren().add(triangCorazon);
         
-        Group escudo = new Group();
         escudo.getChildren().add(rectangEscudo1);
         escudo.getChildren().add(rectangEscudo2);
         
@@ -157,25 +168,33 @@ public class ProtectFX extends Application {
                     escudo.setLayoutX(ancho/2+5);
                     escudo.setLayoutY(alto/2-5);
                     break;
+                case ESCAPE:
+                    primaryStage.close();
+                    break;
+                case SPACE:
+                    if(puntosSalud <=0){
+                        this.restart();
+                        break;
+                    }
             }
         });
         
-        AnimationTimer animacion = new AnimationTimer(){
+        animacion = new AnimationTimer(){
             @Override
             public void handle(long now){
-                flecha1X += 1;
+                flecha1X += 2;
                 flecha1.setLayoutX(flecha1X-10);
                 flecha1.setLayoutY(alto/2);
                 
-                flecha2Y += 1;
+                flecha2Y += 2;
                 flecha2.setLayoutX(ancho/2);
                 flecha2.setLayoutY(flecha2Y-110);
                 
-                flecha3X -= 1;
+                flecha3X -= 2;
                 flecha3.setLayoutX(ancho + flecha3X+210);
                 flecha3.setLayoutY(alto/2);
                 
-                flecha4Y -= 1;
+                flecha4Y -= 2;
                 flecha4.setLayoutX(ancho/2);
                 flecha4.setLayoutY(alto + flecha4Y+360);
                 
@@ -192,32 +211,36 @@ public class ProtectFX extends Application {
                 boolean colisionVacia2 = colisionEscudo2.getBoundsInLocal().isEmpty();
 
                 if(colisionVacia2 == false){
+                    int numFlecha2 = random.nextInt(alto/2);
                     flecha2.setLayoutY(-30);
-                    flecha2Y = 0;
+                    flecha2Y = 0-numFlecha2;
                 }
                 
                 Shape colisionEscudo3 = Shape.intersect(flecha3.triangFlecha, rectangEscudo1);
                 boolean colisionVacia3 = colisionEscudo3.getBoundsInLocal().isEmpty();
 
                 if(colisionVacia3 == false){
+                    int numFlecha3 = random.nextInt(ancho/2);
                     flecha3.setLayoutX(ancho+30);
-                    flecha3X = 0;
+                    flecha3X = 0-numFlecha3;
                 }
                 
                 Shape colisionEscudo4 = Shape.intersect(flecha4.triangFlecha, rectangEscudo1);
                 boolean colisionVacia4 = colisionEscudo4.getBoundsInLocal().isEmpty();
  
                 if(colisionVacia4 == false){
+                    int numFlecha4 = random.nextInt(alto/2);
                     flecha4.setLayoutY(alto+30);
-                    flecha4Y = 0;
+                    flecha4Y = 0-numFlecha4;
                 }
                 
                 Shape colisionCorazon1 = Shape.intersect(flecha1.triangFlecha, circuloCorazon1);
                 boolean daño1 = colisionCorazon1.getBoundsInLocal().isEmpty();
 
                 if(daño1 == false){
+                    int numFlecha1 = random.nextInt(ancho/2);
                     flecha1.setLayoutX(-30);
-                    flecha1X = 0;
+                    flecha1X = 0-numFlecha1;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
                 }
@@ -226,8 +249,9 @@ public class ProtectFX extends Application {
                 boolean daño2 = colisionCorazon2.getBoundsInLocal().isEmpty();
 
                 if(daño2 == false){
+                    int numFlecha2 = random.nextInt(alto/2);
                     flecha2.setLayoutY(-30);
-                    flecha2Y = 0;
+                    flecha2Y = 0-numFlecha2;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
                 }
@@ -236,8 +260,9 @@ public class ProtectFX extends Application {
                 boolean daño3 = colisionCorazon3.getBoundsInLocal().isEmpty();
 
                 if(daño3 == false){
+                    int numFlecha3 = random.nextInt(ancho/2);
                     flecha3.setLayoutX(ancho+30);
-                    flecha3X = 0;
+                    flecha3X = 0-numFlecha3;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
                 }
@@ -246,8 +271,9 @@ public class ProtectFX extends Application {
                 boolean daño4 = colisionCorazon4.getBoundsInLocal().isEmpty();
 
                 if(daño4 == false){
+                    int numFlecha4 = random.nextInt(alto/2);
                     flecha4.setLayoutY(alto+30);
-                    flecha4Y = 0;
+                    flecha4Y = 0-numFlecha4;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
                 }
@@ -263,6 +289,11 @@ public class ProtectFX extends Application {
                     barraSupP.setFill (Color.RED);
                     barraInfP.setFill (Color.RED);
                 }
+                
+                if(puntosSalud <=0){
+                    this.stop();                    
+                }
+                
             };            
         };
         animacion.start();
@@ -273,6 +304,20 @@ public class ProtectFX extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+    
+    private void restart(){
+        puntosSalud = puntosSalud+100;
+        bordePS.setFill(Color.YELLOW);
+        indicadorPS.setFill(Color.YELLOW);
+        izqHache.setFill(Color.YELLOW);
+        derHache.setFill(Color.YELLOW);
+        midHache.setFill(Color.YELLOW);
+        barraIzqP.setFill (Color.YELLOW);
+        barraDerP.setFill (Color.YELLOW);
+        barraSupP.setFill (Color.YELLOW);
+        barraInfP.setFill (Color.YELLOW);
+        animacion.start();
     }
     
 }

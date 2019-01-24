@@ -1,10 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package es.santiagoayalabustamante.protectfx;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -24,6 +22,8 @@ import javafx.stage.Stage;
  * @author Santi
  */
 public class ProtectFX extends Application {
+    
+    //Variables
     
     int flecha1X = 0;
     int flecha2Y = 0;
@@ -45,10 +45,24 @@ public class ProtectFX extends Application {
     Group escudo = new Group();
     AnimationTimer animacion;
     
+    Flecha flecha1 = new Flecha();
+    Flecha flecha2 = new Flecha();
+    Flecha flecha3 = new Flecha();
+    Flecha flecha4 = new Flecha();
+    
+    LocalDateTime inicial;
+    long segundos = 0;
+    long milesimas = 0;
+    
+    
     @Override
     public void start(Stage primaryStage) {
         
+        //Números aleatorios
+        
         Random random = new Random();
+        
+        //Barra de Salud
         
         bordePS = new Rectangle (20, 20, 112, 40);
         huecoPS = new Rectangle (25, 25, 102, 30);
@@ -57,12 +71,16 @@ public class ProtectFX extends Application {
         huecoPS.setFill(Color.BLACK);
         indicadorPS.setFill(Color.YELLOW);
         
+        //Letra H de HP (Health Points)
+        
         izqHache = new Rectangle (150, 25, 5, 30);
         derHache = new Rectangle (165, 25, 5, 30);
         midHache = new Rectangle (150, 37, 20, 5);
         izqHache.setFill(Color.YELLOW);
         derHache.setFill(Color.YELLOW);
         midHache.setFill(Color.YELLOW);
+        
+        //Letra P de HP (Heslth Points)
         
         barraIzqP = new Rectangle (180, 25, 5, 30);
         barraDerP = new Rectangle (194, 25, 5, 15);
@@ -73,11 +91,15 @@ public class ProtectFX extends Application {
         barraSupP.setFill (Color.YELLOW);
         barraInfP.setFill (Color.YELLOW);
         
+        //Escudo
+        
         Rectangle rectangEscudo1 = new Rectangle (3, 3, 50, 3);
         Rectangle rectangEscudo2 = new Rectangle (23, 9, 30, 3);
         rectangEscudo1.setFill(Color.BLUEVIOLET);
         rectangEscudo2.setFill(Color.BLUEVIOLET);
         rectangEscudo2.setRotate(160.0);
+        
+        //Corazón
 
         Circle circuloCorazon1 = new Circle (5, 5, 5, Color.RED);
         Circle circuloCorazon2 = new Circle (13, 5, 5, Color.RED);
@@ -86,6 +108,8 @@ public class ProtectFX extends Application {
             17.0, 8.0,
             9.0, 17.0 });
         triangCorazon.setFill(Color.RED);
+        
+        //Pantalla, resolución y color
          
         Pane root = new Pane();
         Scene scene = new Scene(root, ancho, alto);
@@ -94,6 +118,8 @@ public class ProtectFX extends Application {
         primaryStage.setTitle("FlechaFX");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        //Agrupación de elementos anteriormente creados
             
         Group corazon = new Group ();
         corazon.getChildren().add(circuloCorazon1);
@@ -119,22 +145,26 @@ public class ProtectFX extends Application {
         letraP.getChildren().add(barraSupP);
         letraP.getChildren().add(barraInfP);
         
-        Flecha flecha1 = new Flecha();
+        // Orientaciones de las figuras importadas tipo flecha, y sacamos las flechas de
+        //la pantalla para que no aparezcan en la esquina superior izquierda
         
-        Flecha flecha2 = new Flecha();
-        flecha2.setRotate (90.0);
-        
-        Flecha flecha3 = new Flecha();
-        flecha3.setRotate (180.0);
-        
-        Flecha flecha4 = new Flecha();
+        flecha2.setRotate (90.0);        
+        flecha3.setRotate (180.0);        
         flecha4.setRotate (270.0);
+        flecha1.setLayoutX (-100);
+        flecha2.setLayoutX (-100);
+        flecha3.setLayoutX (-100);
+        flecha4.setLayoutX (-100);
+        
+        //Posicionamiento de el escudo y el corazón
         
         corazon.setLayoutX(ancho/2+3);
         corazon.setLayoutY(alto/2);
         
         escudo.setLayoutX(ancho/2-15);
         escudo.setLayoutY(alto/2-25);
+        
+        //Asignamiento de los grupos al panel
         
         root.getChildren().add(flecha1);
         root.getChildren().add(flecha2);
@@ -145,6 +175,8 @@ public class ProtectFX extends Application {
         root.getChildren().add(barraPuntosSalud);
         root.getChildren().add(letraHache);
         root.getChildren().add(letraP);
+        
+        //Eventos al pulsar teclas
         
         scene.setOnKeyPressed((KeyEvent event) -> {
             switch(event.getCode()){
@@ -172,6 +204,8 @@ public class ProtectFX extends Application {
                     primaryStage.close();
                     break;
                 case SPACE:
+                    inicial = LocalDateTime.now();
+                    animacion.start();
                     if(puntosSalud <=0){
                         this.restart();
                         break;
@@ -182,6 +216,14 @@ public class ProtectFX extends Application {
         animacion = new AnimationTimer(){
             @Override
             public void handle(long now){
+                
+                LocalDateTime actual = LocalDateTime.now();
+                segundos = ChronoUnit.SECONDS.between(inicial, actual);
+                milesimas = ChronoUnit.MILLIS.between(inicial, actual);
+                System.out.println(segundos+"."+milesimas);
+                
+               //Movimiento de las flechas 
+                
                 flecha1X += 2;
                 flecha1.setLayoutX(flecha1X-10);
                 flecha1.setLayoutY(alto/2);
@@ -197,6 +239,8 @@ public class ProtectFX extends Application {
                 flecha4Y -= 2;
                 flecha4.setLayoutX(ancho/2);
                 flecha4.setLayoutY(alto + flecha4Y+360);
+                
+                //Colisionamiento de las flechas con el escudo
                 
                 Shape colisionEscudo1 = Shape.intersect(flecha1.triangFlecha, rectangEscudo1);
                 boolean colisionVacia1 = colisionEscudo1.getBoundsInLocal().isEmpty();
@@ -233,6 +277,8 @@ public class ProtectFX extends Application {
                     flecha4.setLayoutY(alto+30);
                     flecha4Y = 0-numFlecha4;
                 }
+                
+                //Colisionamiento de las flechas con el corazón
                 
                 Shape colisionCorazon1 = Shape.intersect(flecha1.triangFlecha, circuloCorazon1);
                 boolean daño1 = colisionCorazon1.getBoundsInLocal().isEmpty();
@@ -278,6 +324,8 @@ public class ProtectFX extends Application {
                     indicadorPS.setWidth(puntosSalud);
                 }
                 
+                //Cambiamos la barra de salud de color para dar una mayor sensación del estado crítico
+                
                 if(puntosSalud <= 30){
                     bordePS.setFill(Color.RED);
                     indicadorPS.setFill(Color.RED);
@@ -290,13 +338,16 @@ public class ProtectFX extends Application {
                     barraInfP.setFill (Color.RED);
                 }
                 
+                //Para la animación cuando la salud llegue a 0
+                
                 if(puntosSalud <=0){
                     this.stop();                    
                 }
                 
             };            
         };
-        animacion.start();
+        
+        
     }
 
     /**
@@ -306,8 +357,12 @@ public class ProtectFX extends Application {
         launch(args);
     }
     
+    //Reinicio después del fin de partida
+    
     private void restart(){
-        puntosSalud = puntosSalud+100;
+        LocalDateTime inicial = LocalDateTime.now();
+        puntosSalud = 100;
+        indicadorPS.setWidth(puntosSalud);
         bordePS.setFill(Color.YELLOW);
         indicadorPS.setFill(Color.YELLOW);
         izqHache.setFill(Color.YELLOW);
@@ -317,7 +372,10 @@ public class ProtectFX extends Application {
         barraDerP.setFill (Color.YELLOW);
         barraSupP.setFill (Color.YELLOW);
         barraInfP.setFill (Color.YELLOW);
+        flecha1X = 0;
+        flecha2Y = 0;
+        flecha3X = 0;
+        flecha4Y = 0;
         animacion.start();
     }
-    
 }

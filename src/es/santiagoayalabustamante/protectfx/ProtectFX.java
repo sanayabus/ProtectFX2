@@ -1,8 +1,11 @@
 
 package es.santiagoayalabustamante.protectfx;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -15,6 +18,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -53,6 +57,7 @@ public class ProtectFX extends Application {
     LocalDateTime inicial;
     long segundos = 0;
     long milesimas = 0;
+    
     
     
     @Override
@@ -217,10 +222,22 @@ public class ProtectFX extends Application {
             @Override
             public void handle(long now){
                 
+                //Cronómetro
+                
                 LocalDateTime actual = LocalDateTime.now();
-                segundos = ChronoUnit.SECONDS.between(inicial, actual);
                 milesimas = ChronoUnit.MILLIS.between(inicial, actual);
-                System.out.println(segundos+"."+milesimas);
+                
+                Locale locale  = new Locale("en", "UK");
+                String pattern = "###.##";
+                DecimalFormat decimalFormat = (DecimalFormat)
+                        NumberFormat.getNumberInstance(locale);
+                decimalFormat.applyPattern(pattern);
+                String format = decimalFormat.format(milesimas/1000.0);
+                System.out.println(format);
+                
+                Text cronometro = new Text(format);
+                //cronometro.setFont (24);
+                cronometro.setFill (Color.WHITE);
                 
                //Movimiento de las flechas 
                 
@@ -360,7 +377,7 @@ public class ProtectFX extends Application {
     //Reinicio después del fin de partida
     
     private void restart(){
-        LocalDateTime inicial = LocalDateTime.now();
+        //LocalDateTime inicial = LocalDateTime.now();
         puntosSalud = 100;
         indicadorPS.setWidth(puntosSalud);
         bordePS.setFill(Color.YELLOW);

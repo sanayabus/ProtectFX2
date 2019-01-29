@@ -18,6 +18,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -55,9 +56,8 @@ public class ProtectFX extends Application {
     Flecha flecha4 = new Flecha();
     
     LocalDateTime inicial;
-    long segundos = 0;
     long milesimas = 0;
-    
+    long highScore = 0;
     
     
     @Override
@@ -113,6 +113,20 @@ public class ProtectFX extends Application {
             17.0, 8.0,
             9.0, 17.0 });
         triangCorazon.setFill(Color.RED);
+        
+        //Texto Cronómetro
+        
+        Text cronometro = new Text();
+        cronometro.setFont (Font.font(24));
+        cronometro.setFill (Color.WHITE);
+        cronometro.setLayoutX (ancho-80);
+        cronometro.setLayoutY (50);
+        
+        Text cronometroMáx = new Text ();
+        cronometroMáx.setFont (Font.font(24));
+        cronometroMáx.setFill (Color.WHITE);
+        cronometroMáx.setLayoutX (ancho-80);
+        cronometroMáx.setLayoutY (80);
         
         //Pantalla, resolución y color
          
@@ -180,6 +194,8 @@ public class ProtectFX extends Application {
         root.getChildren().add(barraPuntosSalud);
         root.getChildren().add(letraHache);
         root.getChildren().add(letraP);
+        root.getChildren().add(cronometro);
+        root.getChildren().add(cronometroMáx);
         
         //Eventos al pulsar teclas
         
@@ -228,16 +244,13 @@ public class ProtectFX extends Application {
                 milesimas = ChronoUnit.MILLIS.between(inicial, actual);
                 
                 Locale locale  = new Locale("en", "UK");
-                String pattern = "###.##";
+                String pattern = "##0.00";
                 DecimalFormat decimalFormat = (DecimalFormat)
                         NumberFormat.getNumberInstance(locale);
                 decimalFormat.applyPattern(pattern);
                 String format = decimalFormat.format(milesimas/1000.0);
+                cronometro.setText(format);
                 System.out.println(format);
-                
-                Text cronometro = new Text(format);
-                //cronometro.setFont (24);
-                cronometro.setFill (Color.WHITE);
                 
                //Movimiento de las flechas 
                 
@@ -264,7 +277,7 @@ public class ProtectFX extends Application {
 
                 if(colisionVacia1 == false){
                     int numFlecha1 = random.nextInt(ancho/2);
-                    flecha1.setLayoutX(-30);
+                    flecha1.setLayoutX(-50);
                     flecha1X = 0-numFlecha1;
                 }
                 
@@ -273,7 +286,7 @@ public class ProtectFX extends Application {
 
                 if(colisionVacia2 == false){
                     int numFlecha2 = random.nextInt(alto/2);
-                    flecha2.setLayoutY(-30);
+                    flecha2.setLayoutY(-50);
                     flecha2Y = 0-numFlecha2;
                 }
                 
@@ -282,8 +295,8 @@ public class ProtectFX extends Application {
 
                 if(colisionVacia3 == false){
                     int numFlecha3 = random.nextInt(ancho/2);
-                    flecha3.setLayoutX(ancho+30);
-                    flecha3X = 0-numFlecha3;
+                    flecha3.setLayoutX(ancho+50);
+                    flecha3X = 0+numFlecha3;
                 }
                 
                 Shape colisionEscudo4 = Shape.intersect(flecha4.triangFlecha, rectangEscudo1);
@@ -291,8 +304,8 @@ public class ProtectFX extends Application {
  
                 if(colisionVacia4 == false){
                     int numFlecha4 = random.nextInt(alto/2);
-                    flecha4.setLayoutY(alto+30);
-                    flecha4Y = 0-numFlecha4;
+                    flecha4.setLayoutY(alto+50);
+                    flecha4Y = 0+numFlecha4;
                 }
                 
                 //Colisionamiento de las flechas con el corazón
@@ -302,7 +315,7 @@ public class ProtectFX extends Application {
 
                 if(daño1 == false){
                     int numFlecha1 = random.nextInt(ancho/2);
-                    flecha1.setLayoutX(-30);
+                    flecha1.setLayoutX(-50);
                     flecha1X = 0-numFlecha1;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
@@ -313,7 +326,7 @@ public class ProtectFX extends Application {
 
                 if(daño2 == false){
                     int numFlecha2 = random.nextInt(alto/2);
-                    flecha2.setLayoutY(-30);
+                    flecha2.setLayoutY(-50);
                     flecha2Y = 0-numFlecha2;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
@@ -324,8 +337,8 @@ public class ProtectFX extends Application {
 
                 if(daño3 == false){
                     int numFlecha3 = random.nextInt(ancho/2);
-                    flecha3.setLayoutX(ancho+30);
-                    flecha3X = 0-numFlecha3;
+                    flecha3.setLayoutX(ancho+50);
+                    flecha3X = 0+numFlecha3;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
                 }
@@ -335,8 +348,8 @@ public class ProtectFX extends Application {
 
                 if(daño4 == false){
                     int numFlecha4 = random.nextInt(alto/2);
-                    flecha4.setLayoutY(alto+30);
-                    flecha4Y = 0-numFlecha4;
+                    flecha4.setLayoutY(alto+50);
+                    flecha4Y = 0+numFlecha4;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
                 }
@@ -358,7 +371,11 @@ public class ProtectFX extends Application {
                 //Para la animación cuando la salud llegue a 0
                 
                 if(puntosSalud <=0){
-                    this.stop();                    
+                    this.stop();
+                    if(milesimas > highScore){
+                        highScore = milesimas;
+                        cronometroMáx.setText(format);
+                    }
                 }
                 
             };            

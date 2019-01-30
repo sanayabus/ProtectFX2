@@ -59,6 +59,10 @@ public class ProtectFX extends Application {
     long milesimas = 0;
     long highScore = 0;
     
+    final int IZQUIERDA = 0;
+    final int ARRIBA = 1;
+    final int DERECHA = 2;
+    final int ABAJO = 3;
     
     @Override
     public void start(Stage primaryStage) {
@@ -254,19 +258,15 @@ public class ProtectFX extends Application {
                 
                //Movimiento de las flechas 
                 
-                flecha1X += 2;
                 flecha1.setLayoutX(flecha1X-10);
                 flecha1.setLayoutY(alto/2);
                 
-                flecha2Y += 2;
                 flecha2.setLayoutX(ancho/2);
                 flecha2.setLayoutY(flecha2Y-110);
                 
-                flecha3X -= 2;
                 flecha3.setLayoutX(ancho + flecha3X+210);
                 flecha3.setLayoutY(alto/2);
                 
-                flecha4Y -= 2;
                 flecha4.setLayoutX(ancho/2);
                 flecha4.setLayoutY(alto + flecha4Y+360);
                 
@@ -352,6 +352,45 @@ public class ProtectFX extends Application {
                     flecha4Y = 0+numFlecha4;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
+                }
+                
+                // Incremento de la velocidad de las flechas cada 10 segundos
+                
+                if (milesimas < 10000){
+                    flecha1X += 2;
+                    flecha2Y += 2;
+                    flecha3X -= 2;
+                    flecha4Y -= 2;
+                } else if (milesimas >= 10000 && milesimas < 20000){
+                    flecha1X += 2.5;
+                    flecha2Y += 2.5;
+                    flecha3X -= 2.5;
+                    flecha4Y -= 2.5;
+                } else if (milesimas >= 20000 && milesimas < 30000){
+                    flecha1X += 3;
+                    flecha2Y += 3;
+                    flecha3X -= 3;
+                    flecha4Y -= 3;
+                } else if (milesimas >= 30000 && milesimas < 40000){
+                    flecha1X += 3.5;
+                    flecha2Y += 3.5;
+                    flecha3X -= 3.5;
+                    flecha4Y -= 3.5;
+                } else if (milesimas >= 40000 && milesimas <50000){
+                    flecha1X += 4;
+                    flecha2Y += 4;
+                    flecha3X -= 4;
+                    flecha4Y -= 4;
+                } else if (milesimas >= 50000 && milesimas < 60000){
+                    flecha1X += 4.5;
+                    flecha2Y += 4.5;
+                    flecha3X -= 4.5;
+                    flecha4Y -= 4.5;
+                } else if (milesimas >= 60000){
+                    flecha1X += 5;
+                    flecha2Y += 5;
+                    flecha3X -= 5;
+                    flecha4Y -= 5;
                 }
                 
                 //Cambiamos la barra de salud de color para dar una mayor sensación del estado crítico

@@ -15,7 +15,11 @@ import javafx.scene.shape.Rectangle;
  * @author Santi
  */
 public class Flecha extends Group {
-Polygon triangFlecha;
+    Polygon triangFlecha;
+    int posX = 0;
+    int posY = 0;
+    int velX = 0;
+    int velY = 0;
     
     public Flecha() {
         Rectangle rectangFlecha = new Rectangle(0, 0, 15, 10);

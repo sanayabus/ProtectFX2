@@ -31,8 +31,12 @@ public class ProtectFX extends Application {
     //Variables
     
     int flecha1X = 0;
+    int flecha1Y = 0;
+    int flecha2X = 0;
     int flecha2Y = 0;
     int flecha3X = 0;
+    int flecha3Y = 0;
+    int flecha4X = 0;
     int flecha4Y = 0;
     int puntosSalud = 100;
     int ancho = 600;
@@ -55,21 +59,27 @@ public class ProtectFX extends Application {
     Flecha flecha3 = new Flecha();
     Flecha flecha4 = new Flecha();
     
+    //flecha1.posX = -10;
+    
+    //Variables para cronómetro
+    
     LocalDateTime inicial;
     long milesimas = 0;
     long highScore = 0;
+    
+    //Constantes para canales de flechas
     
     final int IZQUIERDA = 0;
     final int ARRIBA = 1;
     final int DERECHA = 2;
     final int ABAJO = 3;
     
+    //Números aleatorios
+    
+    Random random = new Random();
+    
     @Override
     public void start(Stage primaryStage) {
-        
-        //Números aleatorios
-        
-        Random random = new Random();
         
         //Barra de Salud
         
@@ -233,8 +243,8 @@ public class ProtectFX extends Application {
                     animacion.start();
                     if(puntosSalud <=0){
                         this.restart();
-                        break;
                     }
+                    break; 
             }
         });
         
@@ -258,6 +268,8 @@ public class ProtectFX extends Application {
                 
                //Movimiento de las flechas 
                 
+               flecha1.setLayoutX(flecha1.posX + flecha1.velX);
+               
                 flecha1.setLayoutX(flecha1X-10);
                 flecha1.setLayoutY(alto/2);
                 
@@ -357,6 +369,7 @@ public class ProtectFX extends Application {
                 // Incremento de la velocidad de las flechas cada 10 segundos
                 
                 if (milesimas < 10000){
+                    flecha1.velX = 2;
                     flecha1X += 2;
                     flecha2Y += 2;
                     flecha3X -= 2;
@@ -428,6 +441,26 @@ public class ProtectFX extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+    
+    //Calles para las flechas
+    
+    private void orientacion(){
+        switch(random.nextInt(3)){
+            case IZQUIERDA:
+                
+                break;
+            case ARRIBA:
+                
+                break;
+            case DERECHA:
+                
+                break;
+            case ABAJO:
+                
+                break;
+        }
+        
     }
     
     //Reinicio después del fin de partida

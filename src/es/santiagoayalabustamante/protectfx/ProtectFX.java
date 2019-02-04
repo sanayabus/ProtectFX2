@@ -266,10 +266,11 @@ public class ProtectFX extends Application {
                 cronometro.setText(format);
                 
                //Movimiento de las flechas 
-                flecha1.posX += flecha1.velX;
-                flecha1.setLayoutX(flecha1.posX);
+                //flecha1.posX += flecha1.velX;
+                //flecha1.setLayoutX(flecha1.posX);
                 //flecha1.posY += flecha1.velY;
                 //flecha1.setLayoutY(flecha1.posY);
+                flecha2.setLayoutX(flecha1X - 50);
                 flecha1.setLayoutY(alto/2);
                 
                 //flecha2.posX += flecha2.velX;
@@ -382,7 +383,7 @@ public class ProtectFX extends Application {
                 if (milesimas < 10000){
                     flecha1.velX = 2;
                     flecha1.velY = 2;
-                    //flecha1X += 2;
+                    flecha1X += 2;
                     flecha2.velX = 2;
                     flecha2.velY = 2;
                     flecha2Y += 2;

@@ -264,21 +264,32 @@ public class ProtectFX extends Application {
                 decimalFormat.applyPattern(pattern);
                 String format = decimalFormat.format(milesimas/1000.0);
                 cronometro.setText(format);
-                System.out.println(format);
                 
                //Movimiento de las flechas 
-                
-               flecha1.setLayoutX(flecha1.posX + flecha1.velX);
-               
-                flecha1.setLayoutX(flecha1X-10);
+                flecha1.posX += flecha1.velX;
+                flecha1.setLayoutX(flecha1.posX);
+                //flecha1.posY += flecha1.velY;
+                //flecha1.setLayoutY(flecha1.posY);
                 flecha1.setLayoutY(alto/2);
                 
+                //flecha2.posX += flecha2.velX;
+                //flecha2.setLayoutX(flecha2.posX);
+                //flecha2.posY += flecha2.velY;
+                //flecha2.setLayoutY(flecha2.posY);
                 flecha2.setLayoutX(ancho/2);
                 flecha2.setLayoutY(flecha2Y-110);
                 
+                //flecha3.posX += flecha3.velX;
+                //flecha3.setLayoutX(flecha3.posX);
+                //flecha3.posY += flecha3.velY;
+                //flecha3.setLayoutY(flecha3.posY);
                 flecha3.setLayoutX(ancho + flecha3X+210);
                 flecha3.setLayoutY(alto/2);
                 
+                //flecha4.posX += flecha4.velX;
+                //flecha4.setLayoutX(flecha4.posX);
+                //flecha4.posY += flecha4.velY;
+                //flecha4.setLayoutY(flecha4.posY);
                 flecha4.setLayoutX(ancho/2);
                 flecha4.setLayoutY(alto + flecha4Y+360);
                 
@@ -370,39 +381,94 @@ public class ProtectFX extends Application {
                 
                 if (milesimas < 10000){
                     flecha1.velX = 2;
-                    flecha1X += 2;
+                    flecha1.velY = 2;
+                    //flecha1X += 2;
+                    flecha2.velX = 2;
+                    flecha2.velY = 2;
                     flecha2Y += 2;
+                    flecha3.velX = 2;
+                    flecha3.velY = 2;
                     flecha3X -= 2;
+                    flecha4.velX = 2;
+                    flecha4.velY = 2;
                     flecha4Y -= 2;
                 } else if (milesimas >= 10000 && milesimas < 20000){
+                    flecha1.velX = 2.5;
+                    flecha1.velY = 2.5;
                     flecha1X += 2.5;
+                    flecha2.velX = 2.5;
+                    flecha2.velY = 2.5;
                     flecha2Y += 2.5;
+                    flecha3.velX = 2.5;
+                    flecha3.velY = 2.5;
                     flecha3X -= 2.5;
+                    flecha4.velX = 2.5;
+                    flecha4.velY = 2.5;
                     flecha4Y -= 2.5;
                 } else if (milesimas >= 20000 && milesimas < 30000){
+                    flecha1.velX = 3;
+                    flecha1.velY = 3;
                     flecha1X += 3;
+                    flecha2.velX = 3;
+                    flecha2.velY = 3;
                     flecha2Y += 3;
+                    flecha3.velX = 3;
+                    flecha3.velY = 3;
                     flecha3X -= 3;
+                    flecha4.velX = 3;
+                    flecha4.velY = 3;
                     flecha4Y -= 3;
                 } else if (milesimas >= 30000 && milesimas < 40000){
+                    flecha1.velX = 3.5;
+                    flecha1.velY = 3.5;
                     flecha1X += 3.5;
+                    flecha2.velX = 3.5;
+                    flecha2.velY = 3.5;
                     flecha2Y += 3.5;
+                    flecha3.velX = 3.5;
+                    flecha3.velY = 3.5;
                     flecha3X -= 3.5;
+                    flecha4.velX = 3.5;
+                    flecha4.velY = 3.5;
                     flecha4Y -= 3.5;
                 } else if (milesimas >= 40000 && milesimas <50000){
+                    flecha1.velX = 4;
+                    flecha1.velY = 4;
                     flecha1X += 4;
+                    flecha2.velX = 4;
+                    flecha2.velY = 4;
                     flecha2Y += 4;
+                    flecha3.velX = 4;
+                    flecha3.velY = 4;
                     flecha3X -= 4;
+                    flecha4.velX = 4;
+                    flecha4.velY = 4;
                     flecha4Y -= 4;
                 } else if (milesimas >= 50000 && milesimas < 60000){
+                    flecha1.velX = 4.5;
+                    flecha1.velY = 4.5;
                     flecha1X += 4.5;
+                    flecha2.velX = 4.5;
+                    flecha2.velY = 4.5;
                     flecha2Y += 4.5;
+                    flecha3.velX = 4.5;
+                    flecha3.velY = 4.5;
                     flecha3X -= 4.5;
+                    flecha4.velX = 4.5;
+                    flecha4.velY = 4.5;
                     flecha4Y -= 4.5;
                 } else if (milesimas >= 60000){
+                    flecha1.velX = 5;
+                    flecha1.velY = 5;
                     flecha1X += 5;
+                    flecha2.velX = 5;
+                    flecha2.velY = 5;
                     flecha2Y += 5;
+                    flecha3.velX = 5;
+                    flecha3.velY = 5;
                     flecha3X -= 5;
+                    flecha4.velX = 5;
+                    flecha4.velY = 5;
                     flecha4Y -= 5;
                 }
                 

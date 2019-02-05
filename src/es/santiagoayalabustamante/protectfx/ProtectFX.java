@@ -265,12 +265,13 @@ public class ProtectFX extends Application {
                 String format = decimalFormat.format(milesimas/1000.0);
                 cronometro.setText(format);
                 
-               //Movimiento de las flechas 
+               //Movimiento de las flechas
+               
                 //flecha1.posX += flecha1.velX;
                 //flecha1.setLayoutX(flecha1.posX);
                 //flecha1.posY += flecha1.velY;
                 //flecha1.setLayoutY(flecha1.posY);
-                flecha2.setLayoutX(flecha1X - 50);
+                flecha1.setLayoutX(flecha1X - 50);
                 flecha1.setLayoutY(alto/2);
                 
                 //flecha2.posX += flecha2.velX;
@@ -300,36 +301,40 @@ public class ProtectFX extends Application {
                 boolean colisionVacia1 = colisionEscudo1.getBoundsInLocal().isEmpty();
 
                 if(colisionVacia1 == false){
-                    int numFlecha1 = random.nextInt(ancho/2);
+                    //int numFlecha1 = random.nextInt(ancho/2);
                     flecha1.setLayoutX(-50);
-                    flecha1X = 0-numFlecha1;
+                    //flecha1X = 0-numFlecha1;
+                    this.orientacion(flecha1);
                 }
                 
                 Shape colisionEscudo2 = Shape.intersect(flecha2.triangFlecha, rectangEscudo1);
                 boolean colisionVacia2 = colisionEscudo2.getBoundsInLocal().isEmpty();
 
                 if(colisionVacia2 == false){
-                    int numFlecha2 = random.nextInt(alto/2);
+                    //int numFlecha2 = random.nextInt(alto/2);
                     flecha2.setLayoutY(-50);
-                    flecha2Y = 0-numFlecha2;
+                    //flecha2Y = 0-numFlecha2;
+                    this.orientacion(flecha2);
                 }
                 
                 Shape colisionEscudo3 = Shape.intersect(flecha3.triangFlecha, rectangEscudo1);
                 boolean colisionVacia3 = colisionEscudo3.getBoundsInLocal().isEmpty();
 
                 if(colisionVacia3 == false){
-                    int numFlecha3 = random.nextInt(ancho/2);
+                    //int numFlecha3 = random.nextInt(ancho/2);
                     flecha3.setLayoutX(ancho+50);
-                    flecha3X = 0+numFlecha3;
+                    //flecha3X = 0+numFlecha3;
+                    this.orientacion(flecha3);
                 }
                 
                 Shape colisionEscudo4 = Shape.intersect(flecha4.triangFlecha, rectangEscudo1);
                 boolean colisionVacia4 = colisionEscudo4.getBoundsInLocal().isEmpty();
  
                 if(colisionVacia4 == false){
-                    int numFlecha4 = random.nextInt(alto/2);
+                    //int numFlecha4 = random.nextInt(alto/2);
                     flecha4.setLayoutY(alto+50);
-                    flecha4Y = 0+numFlecha4;
+                    //flecha4Y = 0+numFlecha4;
+                    this.orientacion(flecha4);
                 }
                 
                 //Colisionamiento de las flechas con el corazón
@@ -338,44 +343,48 @@ public class ProtectFX extends Application {
                 boolean daño1 = colisionCorazon1.getBoundsInLocal().isEmpty();
 
                 if(daño1 == false){
-                    int numFlecha1 = random.nextInt(ancho/2);
+                    //int numFlecha1 = random.nextInt(ancho/2);
                     flecha1.setLayoutX(-50);
-                    flecha1X = 0-numFlecha1;
+                    //flecha1X = 0-numFlecha1;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
+                    this.orientacion(flecha1);
                 }
                 
                 Shape colisionCorazon2 = Shape.intersect(flecha2.triangFlecha, circuloCorazon1);
                 boolean daño2 = colisionCorazon2.getBoundsInLocal().isEmpty();
 
                 if(daño2 == false){
-                    int numFlecha2 = random.nextInt(alto/2);
+                    //int numFlecha2 = random.nextInt(alto/2);
                     flecha2.setLayoutY(-50);
-                    flecha2Y = 0-numFlecha2;
+                    //flecha2Y = 0-numFlecha2;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
+                    this.orientacion(flecha2);
                 }
                 
                 Shape colisionCorazon3 = Shape.intersect(flecha3.triangFlecha, circuloCorazon2);
                 boolean daño3 = colisionCorazon3.getBoundsInLocal().isEmpty();
 
                 if(daño3 == false){
-                    int numFlecha3 = random.nextInt(ancho/2);
+                    //int numFlecha3 = random.nextInt(ancho/2);
                     flecha3.setLayoutX(ancho+50);
-                    flecha3X = 0+numFlecha3;
+                    //flecha3X = 0+numFlecha3;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
+                    this.orientacion(flecha3);
                 }
                 
                 Shape colisionCorazon4 = Shape.intersect(flecha4.triangFlecha, triangCorazon);
                 boolean daño4 = colisionCorazon4.getBoundsInLocal().isEmpty();
 
                 if(daño4 == false){
-                    int numFlecha4 = random.nextInt(alto/2);
+                    //int numFlecha4 = random.nextInt(alto/2);
                     flecha4.setLayoutY(alto+50);
-                    flecha4Y = 0+numFlecha4;
+                    //flecha4Y = 0+numFlecha4;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
+                    this.orientacion(flecha4);
                 }
                 
                 // Incremento de la velocidad de las flechas cada 10 segundos
@@ -495,14 +504,45 @@ public class ProtectFX extends Application {
                         highScore = milesimas;
                         cronometroMáx.setText(format);
                     }
+                }                                 
+            };
+            
+                                //Calles para las flechas
+            public void orientacion(Flecha flecha){
+                switch(random.nextInt(3)){
+                    case IZQUIERDA:
+                        flecha.posX += flecha.velX;
+                        flecha.setLayoutX(flecha.posX);
+                        flecha.setLayoutY(alto/2);
+                        flecha.setRotate(0.0);
+                        break;
+                    case ARRIBA:
+                        flecha.setLayoutX(ancho/2);
+                        flecha.posY += flecha.velY;
+                        flecha.setLayoutY(flecha.posY);
+                        flecha.setRotate(90.0);
+                        break;
+                    case DERECHA:
+                        flecha.posX += flecha.velX;
+                        flecha.setLayoutX(flecha.posX);
+                        flecha.setLayoutY(alto/2);
+                        flecha.setRotate(180.0);
+                        break;
+                    case ABAJO:
+                        flecha.setLayoutX(ancho/2);
+                        flecha.posY += flecha.velY;
+                        flecha.setLayoutY(flecha.posY);
+                        flecha.setRotate(270.0);
+                        break;
                 }
-                
-            };            
+
+            }
+            
         };
         
         
     }
-
+    
     /**
      * @param args the command line arguments
      */
@@ -510,25 +550,7 @@ public class ProtectFX extends Application {
         launch(args);
     }
     
-    //Calles para las flechas
-    
-    private void orientacion(){
-        switch(random.nextInt(3)){
-            case IZQUIERDA:
-                
-                break;
-            case ARRIBA:
-                
-                break;
-            case DERECHA:
-                
-                break;
-            case ABAJO:
-                
-                break;
-        }
-        
-    }
+
     
     //Reinicio después del fin de partida
     

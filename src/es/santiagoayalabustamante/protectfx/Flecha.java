@@ -22,7 +22,7 @@ public class Flecha extends Group {
     double velY = 0;
     
     public Flecha() {
-        Rectangle rectangFlecha = new Rectangle(0, 0, 15, 10);
+        Rectangle rectangFlecha = new Rectangle(0, 0, 16, 10);
         triangFlecha = new Polygon(new double[]{
             15.0, -5.0,
             25.0, 5.0,

@@ -182,6 +182,7 @@ public class ProtectFX extends Application {
         // Orientaciones de las figuras importadas tipo flecha, y sacamos las flechas de
         //la pantalla para que no aparezcan en la esquina superior izquierda
         
+        velocidadDificultad = 2.0;
         flecha2.setRotate (90.0);        
         flecha3.setRotate (180.0);        
         flecha4.setRotate (270.0);
@@ -190,9 +191,21 @@ public class ProtectFX extends Application {
         flecha3.setLayoutX(-100);
         flecha4.setLayoutX(-100);
         flecha1.posX = (-20);
+        flecha1.posY = alto/2;
+        flecha1.velY = 0;
+        flecha1.velX = velocidadDificultad;
+        flecha2.posX = ancho/2;
         flecha2.posY = (-100);
+        flecha2.velX = 0;
+        flecha2.velY = velocidadDificultad;
         flecha3.posX = ancho+180;
+        flecha3.posY = alto/2;
+        flecha3.velX = -velocidadDificultad;
+        flecha3.velY = 0;
+        flecha4.posX = ancho/2;
         flecha4.posY = alto+260;
+        flecha4.velX = 0;
+        flecha4.velY = -velocidadDificultad;
         
         //Posicionamiento de el escudo y el corazón
         
@@ -265,7 +278,7 @@ public class ProtectFX extends Application {
                 Locale locale  = new Locale("en", "UK");
                 String pattern = "##0.00";
                 DecimalFormat decimalFormat = (DecimalFormat)
-                        NumberFormat.getNumberInstance(locale);
+                NumberFormat.getNumberInstance(locale);
                 decimalFormat.applyPattern(pattern);
                 String format = decimalFormat.format(milesimas/1000.0);
                 cronometro.setText(format);
@@ -275,18 +288,18 @@ public class ProtectFX extends Application {
                 flecha1.posX += flecha1.velX;
                 flecha1.posY += flecha1.velY;
                 flecha1.setLayoutX(flecha1.posX);
-                flecha1.setLayoutY(alto/2);
-                flecha1.velY = 0;
-                flecha1.velX = velocidadDificultad;
+                flecha1.setLayoutY(flecha1.posY);
+                System.out.println(flecha1.posX);
+                System.out.println(flecha1.velX);
+                
                 //flecha1.setLayoutX(flecha1X - 50);
                 //flecha1.setLayoutY(alto/2);
                 
                 flecha2.posX += flecha2.velX;
                 flecha2.posY += flecha2.velY;
-                flecha2.setLayoutX(ancho/2);
+                flecha2.setLayoutX(flecha2.posX);
                 flecha2.setLayoutY(flecha2.posY);
-                flecha2.velX = 0;
-                flecha2.velY = velocidadDificultad;
+                
                 //flecha2.setLayoutX(ancho/2);
                 
                 //flecha2.setLayoutY(flecha2Y-110);
@@ -294,18 +307,16 @@ public class ProtectFX extends Application {
                 flecha3.posX += flecha3.velX;
                 flecha3.posY += flecha3.velY;
                 flecha3.setLayoutX(flecha3.posX);
-                flecha3.setLayoutY(alto/2);
-                flecha3.velX = -velocidadDificultad;
-                flecha3.velY = 0;
+                flecha3.setLayoutY(flecha3.posY);
+                
                 //flecha3.setLayoutX(ancho + flecha3X+210);
                 //flecha3.setLayoutY(alto/2);
                 
                 flecha4.posX += flecha4.velX;                
                 flecha4.posY += flecha4.velY;
-                flecha4.setLayoutX(ancho/2);
+                flecha4.setLayoutX(flecha4.posX);
                 flecha4.setLayoutY(flecha4.posY);
-                flecha4.velX = 0;
-                flecha4.velY = -velocidadDificultad;
+                
                 //flecha4.setLayoutX(ancho/2);
                 //flecha4.setLayoutY(alto + flecha4Y+360);
                 
@@ -438,9 +449,9 @@ public class ProtectFX extends Application {
             
                                 //Calles para las flechas
             public void orientacion(Flecha flecha){
-                switch(random.nextInt(3)){
+                switch(random.nextInt(4)){
                     case IZQUIERDA:
-                        flecha.posX = 0;
+                        flecha.posX = 0-random.nextInt(100);
                         flecha.posY = alto/2;
                         flecha.velX = velocidadDificultad;
                         flecha.velY = 0;
@@ -450,7 +461,7 @@ public class ProtectFX extends Application {
                         break;
                     case ARRIBA:
                         flecha.posX = ancho/2;
-                        flecha.posY = 0;
+                        flecha.posY = 0-random.nextInt(100);
                         flecha.velX = 0;
                         flecha.velY = velocidadDificultad;
                         flecha.setLayoutX(flecha.posX);
@@ -458,7 +469,7 @@ public class ProtectFX extends Application {
                         flecha.setRotate(90.0);
                         break;
                     case DERECHA:
-                        flecha.posX = ancho;
+                        flecha.posX = ancho+random.nextInt(100);
                         flecha.posY = alto/2;
                         flecha.velY = 0;
                         flecha.velX = -velocidadDificultad;
@@ -468,7 +479,7 @@ public class ProtectFX extends Application {
                         break;
                     case ABAJO:
                         flecha.posX = ancho/2;
-                        flecha.posY = alto;
+                        flecha.posY = alto+random.nextInt(100);
                         flecha.velX = 0;
                         flecha.velY = -velocidadDificultad;
                         flecha.setLayoutX(flecha.posX);
@@ -508,10 +519,27 @@ public class ProtectFX extends Application {
         barraDerP.setFill (Color.YELLOW);
         barraSupP.setFill (Color.YELLOW);
         barraInfP.setFill (Color.YELLOW);
-        flecha1X = 0;
-        flecha2Y = 0;
-        flecha3X = 0;
-        flecha4Y = 0;
+        velocidadDificultad = 2;
+        flecha1.posX = (-20);
+        flecha1.posY = alto/2;
+        flecha1.velY = 0;
+        flecha1.velX = velocidadDificultad;
+        flecha2.posX = ancho/2;
+        flecha2.posY = (-100);
+        flecha2.velX = 0;
+        flecha2.velY = velocidadDificultad;
+        flecha3.posX = ancho+180;
+        flecha3.posY = alto/2;
+        flecha3.velX = -velocidadDificultad;
+        flecha3.velY = 0;
+        flecha4.posX = ancho/2;
+        flecha4.posY = alto+260;
+        flecha4.velX = 0;
+        flecha4.velY = -velocidadDificultad;
+        flecha1.setRotate(0.0);
+        flecha2.setRotate (90.0);        
+        flecha3.setRotate (180.0);        
+        flecha4.setRotate (270.0);
         animacion.start();
     }
 }

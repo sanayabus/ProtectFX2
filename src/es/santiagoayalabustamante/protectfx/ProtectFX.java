@@ -1,6 +1,11 @@
 
+// En este proyecto crearemos el videojuego Protect, que está basado en una de las fases de la pelea con Undyne del
+// videojuego Undertale, la cual consiste en usar una barrera para defenderte de unas lanzas que te lanza ella.
+// Hecho por Santiago Ayala Bustamante en 10/02/2019
+
 package es.santiagoayalabustamante.protectfx;
 
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -11,8 +16,12 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -30,14 +39,6 @@ public class ProtectFX extends Application {
     
     //Variables
     
-    int flecha1X = 0;
-    int flecha1Y = 0;
-    int flecha2X = 0;
-    int flecha2Y = 0;
-    int flecha3X = 0;
-    int flecha3Y = 0;
-    int flecha4X = 0;
-    int flecha4Y = 0;
     int puntosSalud = 100;
     int ancho = 600;
     int alto = 600;
@@ -54,13 +55,12 @@ public class ProtectFX extends Application {
     Rectangle barraInfP;
     Group escudo = new Group();
     AnimationTimer animacion;
-    
+    MediaPlayer mediaPlayer;
     Flecha flecha1 = new Flecha();
     Flecha flecha2 = new Flecha();
     Flecha flecha3 = new Flecha();
     Flecha flecha4 = new Flecha();
-    
-    //flecha1.posX = -10;
+    boolean pausa = false;
     
     //Variables para cronómetro
     
@@ -129,27 +129,39 @@ public class ProtectFX extends Application {
             9.0, 17.0 });
         triangCorazon.setFill(Color.RED);
         
-        //Texto Cronómetro
+        //Texto para el cronómetro y la puntuación máxima
         
         Text cronometro = new Text();
         cronometro.setFont (Font.font(24));
         cronometro.setFill (Color.WHITE);
-        cronometro.setLayoutX (ancho-80);
+        cronometro.setLayoutX (ancho-210);
         cronometro.setLayoutY (50);
         
         Text cronometroMáx = new Text ();
         cronometroMáx.setFont (Font.font(24));
         cronometroMáx.setFill (Color.WHITE);
-        cronometroMáx.setLayoutX (ancho-80);
+        cronometroMáx.setLayoutX (ancho-260);
         cronometroMáx.setLayoutY (80);
         
-        //Pantalla, resolución y color
+        //Música
+        //Puedes encontrar la canción aquí https://www.youtube.com/watch?v=8Ka1QZQ4zf0
+        
+        final URL resource = getClass().getResource("Alejandro Sans - alma partía [Mashup].mp3");
+        Media media = new Media(resource.toString());
+        mediaPlayer = new MediaPlayer(media);
+        
+        // Imagen Inicial
+        
+        Image image1 = new Image(getClass().getResourceAsStream("introduccion.png"));
+        ImageView imageView1 = new ImageView(image1);
+        
+        //Pantalla, resolución y color de fondo
          
         Pane root = new Pane();
         Scene scene = new Scene(root, ancho, alto);
         scene.setFill(Color.BLACK);
         
-        primaryStage.setTitle("FlechaFX");
+        primaryStage.setTitle("ProtectFX");
         primaryStage.setScene(scene);
         primaryStage.show();
         
@@ -179,8 +191,8 @@ public class ProtectFX extends Application {
         letraP.getChildren().add(barraSupP);
         letraP.getChildren().add(barraInfP);
         
-        // Orientaciones de las figuras importadas tipo flecha, y sacamos las flechas de
-        //la pantalla para que no aparezcan en la esquina superior izquierda
+        // Posicionamiento de las flechas inicialmente, así como la velocidad y orientación 
+        // 
         
         velocidadDificultad = 2.0;
         flecha2.setRotate (90.0);        
@@ -228,6 +240,7 @@ public class ProtectFX extends Application {
         root.getChildren().add(letraP);
         root.getChildren().add(cronometro);
         root.getChildren().add(cronometroMáx);
+        root.getChildren().add(imageView1);
         
         //Eventos al pulsar teclas
         
@@ -253,15 +266,30 @@ public class ProtectFX extends Application {
                     escudo.setLayoutX(ancho/2+5);
                     escudo.setLayoutY(alto/2-5);
                     break;
+                // Botón de cierre
                 case ESCAPE:
                     primaryStage.close();
                     break;
-                case SPACE:
-                    inicial = LocalDateTime.now();
-                    animacion.start();
-                    if(puntosSalud <=0){
-                        this.restart();
+                // Botón de Pausa
+                case ENTER:
+                    if (pausa == false){
+                        mediaPlayer.pause();
+                        animacion.stop();
+                        pausa = true;
+                    } else{
+                        animacion.start();
+                        mediaPlayer.play();
+                        pausa = false;
                     }
+                    break;
+                // Botón de Inicio/Reinicio
+                case SPACE:
+                    imageView1.setOpacity(0.0);
+                    inicial = LocalDateTime.now();
+                    mediaPlayer.stop();// Con el mediaplayer stop y play, reiniciamos la canción
+                    mediaPlayer.play();
+                    animacion.start();
+                    this.restart();
                     break; 
             }
         });
@@ -269,7 +297,7 @@ public class ProtectFX extends Application {
         animacion = new AnimationTimer(){
             @Override
             public void handle(long now){
-                
+                     
                 //Cronómetro
                 
                 LocalDateTime actual = LocalDateTime.now();
@@ -281,7 +309,8 @@ public class ProtectFX extends Application {
                 NumberFormat.getNumberInstance(locale);
                 decimalFormat.applyPattern(pattern);
                 String format = decimalFormat.format(milesimas/1000.0);
-                cronometro.setText(format);
+                cronometro.setText("Puntuación: "+format);
+                System.out.println(milesimas);
                 
                //Movimiento de las flechas
                
@@ -289,36 +318,21 @@ public class ProtectFX extends Application {
                 flecha1.posY += flecha1.velY;
                 flecha1.setLayoutX(flecha1.posX);
                 flecha1.setLayoutY(flecha1.posY);
-                System.out.println(flecha1.posX);
-                System.out.println(flecha1.velX);
-                
-                //flecha1.setLayoutX(flecha1X - 50);
-                //flecha1.setLayoutY(alto/2);
                 
                 flecha2.posX += flecha2.velX;
                 flecha2.posY += flecha2.velY;
                 flecha2.setLayoutX(flecha2.posX);
                 flecha2.setLayoutY(flecha2.posY);
                 
-                //flecha2.setLayoutX(ancho/2);
-                
-                //flecha2.setLayoutY(flecha2Y-110);
-                
                 flecha3.posX += flecha3.velX;
                 flecha3.posY += flecha3.velY;
                 flecha3.setLayoutX(flecha3.posX);
                 flecha3.setLayoutY(flecha3.posY);
                 
-                //flecha3.setLayoutX(ancho + flecha3X+210);
-                //flecha3.setLayoutY(alto/2);
-                
                 flecha4.posX += flecha4.velX;                
                 flecha4.posY += flecha4.velY;
                 flecha4.setLayoutX(flecha4.posX);
                 flecha4.setLayoutY(flecha4.posY);
-                
-                //flecha4.setLayoutX(ancho/2);
-                //flecha4.setLayoutY(alto + flecha4Y+360);
                 
                 //Colisionamiento de las flechas con el escudo
                 
@@ -326,8 +340,6 @@ public class ProtectFX extends Application {
                 boolean colisionVacia1 = colisionEscudo1.getBoundsInLocal().isEmpty();
 
                 if(colisionVacia1 == false){
-                    //int numFlecha1 = random.nextInt(ancho/2);
-                    //flecha1X = 0-numFlecha1;
                     this.orientacion(flecha1);
                 }
                 
@@ -335,8 +347,6 @@ public class ProtectFX extends Application {
                 boolean colisionVacia2 = colisionEscudo2.getBoundsInLocal().isEmpty();
 
                 if(colisionVacia2 == false){
-                    //int numFlecha2 = random.nextInt(alto/2);
-                    //flecha2Y = 0-numFlecha2;
                     this.orientacion(flecha2);
                 }
                 
@@ -344,8 +354,6 @@ public class ProtectFX extends Application {
                 boolean colisionVacia3 = colisionEscudo3.getBoundsInLocal().isEmpty();
 
                 if(colisionVacia3 == false){
-                    //int numFlecha3 = random.nextInt(ancho/2);
-                    //flecha3X = 0+numFlecha3;
                     this.orientacion(flecha3);
                 }
                 
@@ -353,8 +361,6 @@ public class ProtectFX extends Application {
                 boolean colisionVacia4 = colisionEscudo4.getBoundsInLocal().isEmpty();
  
                 if(colisionVacia4 == false){
-                    //int numFlecha4 = random.nextInt(alto/2);
-                    //flecha4Y = 0+numFlecha4;
                     this.orientacion(flecha4);
                 }
                 
@@ -364,8 +370,6 @@ public class ProtectFX extends Application {
                 boolean daño1 = colisionCorazon1.getBoundsInLocal().isEmpty();
 
                 if(daño1 == false){
-                    //int numFlecha1 = random.nextInt(ancho/2);
-                    //flecha1X = 0-numFlecha1;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
                     this.orientacion(flecha1);
@@ -375,8 +379,6 @@ public class ProtectFX extends Application {
                 boolean daño2 = colisionCorazon2.getBoundsInLocal().isEmpty();
 
                 if(daño2 == false){
-                    //int numFlecha2 = random.nextInt(alto/2);
-                    //flecha2Y = 0-numFlecha2;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
                     this.orientacion(flecha2);
@@ -386,8 +388,6 @@ public class ProtectFX extends Application {
                 boolean daño3 = colisionCorazon3.getBoundsInLocal().isEmpty();
 
                 if(daño3 == false){
-                    //int numFlecha3 = random.nextInt(ancho/2);
-                    //flecha3X = 0+numFlecha3;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
                     this.orientacion(flecha3);
@@ -397,32 +397,72 @@ public class ProtectFX extends Application {
                 boolean daño4 = colisionCorazon4.getBoundsInLocal().isEmpty();
 
                 if(daño4 == false){
-                    //int numFlecha4 = random.nextInt(alto/2);
-                    //flecha4Y = 0+numFlecha4;
                     puntosSalud = puntosSalud-10;
                     indicadorPS.setWidth(puntosSalud);
                     this.orientacion(flecha4);
                 }
                 
-                // Incremento de la velocidad de las flechas cada 10 segundos
+                // Incremento de la velocidad de las flechas acorde con la canción hasta un punto razonable
                 
-                if (milesimas < 10000){
+                if (milesimas < 6500){
                     velocidadDificultad = 2;
-                } else if (milesimas >= 10000 && milesimas < 20000){
+                } else if (milesimas >= 6500 && milesimas < 14500){
                     velocidadDificultad = 2.5;
-                } else if (milesimas >= 20000 && milesimas < 30000){
+                } else if (milesimas >= 14500 && milesimas < 30500){
                     velocidadDificultad = 3;
-                } else if (milesimas >= 30000 && milesimas < 40000){
+                } else if (milesimas >= 30500 && milesimas < 38500){
                     velocidadDificultad = 3.5;
-                } else if (milesimas >= 40000 && milesimas <50000){
+                } else if (milesimas >= 38500 && milesimas <46000){
                     velocidadDificultad = 4;
-                } else if (milesimas >= 50000 && milesimas < 60000){
+                } else if (milesimas >= 46000 && milesimas < 118000){
                     velocidadDificultad = 4.5;
-                } else if (milesimas >= 60000){
+                } else if (milesimas >= 118000){
                     velocidadDificultad = 5;
                 }
                 
+                // Recuperación de vida cada 10 segundos, sólo hasta el segundo 60
+                // Tienen un poco de margen porque no todas las milésimas aparecen en la variable, cosa
+                // que se puede comprobar en la consola del sistema gracias a la línea 313
+                
+                if (milesimas >= 9990 && milesimas <= 10010){
+                    if (puntosSalud < 100){
+                        puntosSalud = puntosSalud+10;
+                        indicadorPS.setWidth(puntosSalud);
+                    }
+                }
+                if (milesimas >= 19990 && milesimas <= 20010){
+                    if (puntosSalud < 100){
+                        puntosSalud = puntosSalud+10;
+                        indicadorPS.setWidth(puntosSalud);
+                    }
+                }
+                if (milesimas >= 29990 && milesimas <= 30010){
+                    if (puntosSalud < 100){
+                        puntosSalud = puntosSalud+10;
+                        indicadorPS.setWidth(puntosSalud);
+                    }
+                }
+                if (milesimas >= 39990 && milesimas <= 40010){
+                    if (puntosSalud < 100){
+                        puntosSalud = puntosSalud+10;
+                        indicadorPS.setWidth(puntosSalud);
+                    }
+                }
+                if (milesimas >= 49990 && milesimas <= 50010){
+                    if (puntosSalud < 100){
+                        puntosSalud = puntosSalud+10;
+                        indicadorPS.setWidth(puntosSalud);
+                    }
+                }
+                if (milesimas >= 59990 && milesimas <= 60010){
+                    if (puntosSalud < 100){
+                        puntosSalud = puntosSalud+10;
+                        indicadorPS.setWidth(puntosSalud);
+                    }
+                }
+                
                 //Cambiamos la barra de salud de color para dar una mayor sensación del estado crítico
+                // y volvemos a cambiarla a amarillo en el caso de que recuperemos algo de vida
                 
                 if(puntosSalud <= 30){
                     bordePS.setFill(Color.RED);
@@ -434,20 +474,33 @@ public class ProtectFX extends Application {
                     barraDerP.setFill (Color.RED);
                     barraSupP.setFill (Color.RED);
                     barraInfP.setFill (Color.RED);
+                } else {
+                    bordePS.setFill(Color.YELLOW);
+                    indicadorPS.setFill(Color.YELLOW);
+                    izqHache.setFill(Color.YELLOW);
+                    derHache.setFill(Color.YELLOW);
+                    midHache.setFill(Color.YELLOW);
+                    barraIzqP.setFill (Color.YELLOW);
+                    barraDerP.setFill (Color.YELLOW);
+                    barraSupP.setFill (Color.YELLOW);
+                    barraInfP.setFill (Color.YELLOW);
                 }
                 
-                //Para la animación cuando la salud llegue a 0
+                // Para la animación cuando la salud llegue a 0 y comprueba si la puntuación conseguida es la nueva
+                // puntuación máxima
                 
                 if(puntosSalud <=0){
+                    mediaPlayer.stop();
                     this.stop();
                     if(milesimas > highScore){
                         highScore = milesimas;
-                        cronometroMáx.setText(format);
+                        cronometroMáx.setText("Puntuación Máx: "+format);
                     }
                 }                                 
             };
             
-                                //Calles para las flechas
+            //Calles para las flechas
+            
             public void orientacion(Flecha flecha){
                 switch(random.nextInt(4)){
                     case IZQUIERDA:
@@ -504,7 +557,7 @@ public class ProtectFX extends Application {
     
 
     
-    //Reinicio después del fin de partida
+    //Reinicio
     
     private void restart(){
         //LocalDateTime inicial = LocalDateTime.now();
@@ -540,6 +593,7 @@ public class ProtectFX extends Application {
         flecha2.setRotate (90.0);        
         flecha3.setRotate (180.0);        
         flecha4.setRotate (270.0);
+        mediaPlayer.play();
         animacion.start();
     }
 }
